@@ -1,0 +1,60 @@
+# Import Data
+import pandas as pd
+df = pd.read_csv("/path/healthcare-dataset-stroke-data.csv") # enter your path
+
+#%% Preprocessing - Friday 10/11/24
+
+# get familiar with the data
+df.head(10)
+df.tail(10)
+df.shape # 5110, 12
+
+# Handle Missing data
+print(df.isnull().values.any()) # True
+
+# Show missing data in BMI column
+print(df['bmi'].isnull().sum().sum()) #201
+
+# count values in bmi col
+value_counts = df['bmi'].value_counts()
+print(value_counts)
+
+# Identify outliers
+# see max and min of bmi
+max(df['bmi']) #97.6
+min(df['bmi']) # 10.3
+
+# Given extreme outliers, use median instead
+df['bmi'].median() #28.1 
+df['bmi'].mode() #28.7
+
+# substitute median value in for missing in bmi columns
+median = df['bmi'].median()
+
+# Replace missing values in BMI column with median
+df['bmi'].fillna(median, inplace=True)
+
+# drop ID column
+df = df.drop(['id'], axis=1)
+
+# count values in stroke feature
+## revisit class imbalance - esp for decision tree
+df['stroke'].value_counts() # 4861 0 # 249 1
+
+# Examine value counts for all variables to identify discrepancies
+for col in df.columns:
+    print(df[col].value_counts())
+    
+#No changes to text in categorical variables needed: all are grouping properly
+
+# change binary ever_married which is "Yes/No" to 0 and 1, to be consistent with other binary formats
+df['ever_married'] = df['ever_married'].replace({'Yes':1, 'No':0})
+
+
+#%% Visualizations - Monday 10/14/24
+
+
+    
+
+
+
